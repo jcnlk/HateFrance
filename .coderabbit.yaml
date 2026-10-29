@@ -18,7 +18,7 @@ reviews:
   path_instructions:
     - path: "src/**"
       instructions: |
-        This is a Fabric client addon for NoammAddons targeting Minecraft 26.1.2, 26.2, and 26.3 through Stonecutter.
+        This is a Fabric client addon for NoammAddons targeting Minecraft 26.2 and 26.3 through Stonecutter.
         Interpret Stonecutter condition comments and the configuration in stonecutter.gradle.kts before evaluating version-specific code.
         Check NoammAddons API compatibility, event consumption, client-thread access, and behavior across the supported Minecraft targets.
     - path: "**/gradle.properties"
@@ -28,7 +28,7 @@ reviews:
     - path: "**/*.gradle.kts"
       instructions: |
         Account for Stonecutter preprocessing, Java 25, and the shared source tree.
-        Verify that buildAll still produces a separate JAR for each of the three Minecraft targets in build/libs/<target>/.
+        Verify that buildAll still produces a separate JAR for each of the two Minecraft targets in build/libs/<target>/.
     - path: ".github/workflows/**"
       instructions: |
         Review event and path filters, token permissions, cache trust, and pinned action references.

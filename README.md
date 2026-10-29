@@ -27,13 +27,12 @@ Ultrasequencer experiments, and mouse clicking.
 
 | Minecraft | HateFrance | NoammAddons |
 |-----------|----------------|-------------|
-| 26.1.2    | 1.3.2          | 1.3.2       |
 | 26.2      | 1.3.2          | 1.3.2       |
 | 26.3      | 1.3.2          | 1.3.2       |
 
 ## Setup
 
-1. Install [Fabric Loader](https://fabricmc.net/use/installer/) for Minecraft 26.1.2, 26.2, or 26.3.
+1. Install [Fabric Loader](https://fabricmc.net/use/installer/) for Minecraft 26.2 or 26.3.
 2. Add [Fabric API](https://modrinth.com/mod/fabric-api),
    [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin),
    and the matching [NoammAddons](https://github.com/Noamm9/NoammAddons)
