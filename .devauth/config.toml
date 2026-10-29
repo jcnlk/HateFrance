@@ -1,0 +1,9 @@
+defaultEnabled = true
+# Set to "alt" to use the second account for every Minecraft version.
+defaultAccount = "main"
+
+[accounts.main]
+type = "microsoft"
+
+[accounts.alt]
+type = "microsoft"

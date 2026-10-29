@@ -33,6 +33,8 @@ bin/
 # fabric
 
 run/
+/.devauth/*
+!/.devauth/config.toml
 
 # java
 

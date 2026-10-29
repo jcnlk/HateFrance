@@ -125,7 +125,7 @@ loom {
         generateRunConfig.set(true)
         jvmArguments.addAll(
             "-Dmixin.debug.export=true",
-            "-Ddevauth.enabled=true",
+            "-Ddevauth.configDir=${rootProject.file(".devauth").absolutePath}",
             "-XX:+AllowEnhancedClassRedefinition",
             "-XX:+IgnoreUnrecognizedVMOptions",
         )
