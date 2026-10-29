@@ -64,6 +64,11 @@
       "enabled": false
     },
     {
+      "description": "Fabric Loader updates are managed manually",
+      "matchPackageNames": ["net.fabricmc:fabric-loader"],
+      "enabled": false
+    },
+    {
       "description": "NoammAddons release classifiers and required mod versions must be updated together manually",
       "matchPackageNames": ["com.github.Noamm9:NoammAddons"],
       "enabled": false
