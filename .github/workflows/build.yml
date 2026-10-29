@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches: [main]
-    paths: &build-paths
+    paths:
       - ".github/workflows/build.yml"
       - "gradle/**"
       - "src/**"
@@ -15,7 +15,7 @@ on:
       - "settings.gradle.kts"
       - "stonecutter.gradle.kts"
   pull_request:
-    paths: *build-paths
+    branches: [main]
   workflow_dispatch:
 
 permissions:

@@ -3,12 +3,11 @@ name: Workflow checks
 on:
   push:
     branches: [main]
-    paths: &workflow-paths
+    paths:
       - ".github/workflows/**"
       - ".forgejo/workflows/**"
   pull_request:
     branches: [main]
-    paths: *workflow-paths
   workflow_dispatch:
 
 permissions:

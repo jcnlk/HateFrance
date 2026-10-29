@@ -7,9 +7,7 @@ on:
       - "renovate.json"
       - ".github/workflows/renovate-validation.yml"
   pull_request:
-    paths:
-      - "renovate.json"
-      - ".github/workflows/renovate-validation.yml"
+    branches: [main]
   workflow_dispatch:
 
 permissions:
