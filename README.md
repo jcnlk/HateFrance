@@ -1,5 +1,7 @@
 # HateFrance
 
+[![GitHub downloads](https://img.shields.io/github/downloads/jcnlk/HateFrance/total?logo=github)](https://github.com/jcnlk/HateFrance/releases)
+
 Formerly known as **DancingSquared**.
 
 > A client-side Fabric addon for NoammAddons that automates selected Hypixel SkyBlock tasks.
