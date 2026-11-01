@@ -84,9 +84,7 @@ object DancingSquared : Feature("Automatically completes the Dance Room puzzle")
 
             val segment = segments[seg]
             val playerPos = if (segment.axis == "x") player.x else player.z
-            val low = if (segment.target >= 0) segment.target else segment.target - 1.0
-            val high = if (segment.target >= 0) segment.target + 1.0 else segment.target
-            if (playerPos !in low..high) return@register
+            if (playerPos !in segment.target - 1.0..segment.target) return@register
 
             key.isDown = false
             currentKeyBind = null
@@ -198,5 +196,5 @@ object DancingSquared : Feature("Automatically completes the Dance Room puzzle")
         ChatUtils.modMessage("&7Beat $beat$statusStr.")
     }
 
-    private data class Segment(val axis: String, val target: Double, val key: KeyMapping)
+    private class Segment(val axis: String, val target: Double, val key: KeyMapping)
 }

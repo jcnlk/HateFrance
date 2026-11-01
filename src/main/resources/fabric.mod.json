@@ -18,12 +18,6 @@
     "entrypoints": {
         "modmenu": [
             "com.github.noamm9.hatefrance.compat.ModMenuIntegration"
-        ],
-        "client": [
-            {
-                "value": "com.github.noamm9.hatefrance.HateFrance",
-                "adapter": "kotlin"
-            }
         ]
     },
     "mixins": [

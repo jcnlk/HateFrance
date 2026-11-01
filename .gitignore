@@ -44,8 +44,6 @@ replay_*.log
 *.jfr
 
 .kotlin/
-/.kotlin
-/.kotlin
 *.salive
 /logs
 

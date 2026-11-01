@@ -1,6 +1,6 @@
 package com.github.noamm9.hatefrance.features.impl.addon
 
-internal data class Cell(
+internal class Cell(
     val slot: Int,
     var itemId: String = "",
     var count: Int = 0,
@@ -8,7 +8,7 @@ internal data class Cell(
 )
 
 internal class ExperimentSolver {
-    enum class Mode { NONE, CHRONOMATRON, ULTRASEQUENCER }
+    private enum class Mode { NONE, CHRONOMATRON, ULTRASEQUENCER }
 
     private var mode = Mode.NONE
     private val chronomatron = mutableListOf<Int>()
@@ -88,7 +88,6 @@ internal class ExperimentSolver {
                 ultraSize++
             }
             if ((0 until ultraSize).any { ultrasequencer[it] == -1 }) clearUltrasequencer()
-            ultraIndex = 0
             return null
         }
         if (control != "minecraft:clock" || !canClick || ultraIndex >= ultraSize) return null
@@ -98,6 +97,7 @@ internal class ExperimentSolver {
     private fun clearUltrasequencer() {
         ultrasequencer.fill(-1)
         ultraSize = 0
+        ultraIndex = 0
     }
 
     private fun clear() {
@@ -106,7 +106,6 @@ internal class ExperimentSolver {
         chronoIndex = 0
         chronoRoundComplete = false
         clearUltrasequencer()
-        ultraIndex = 0
     }
 
     private fun cell(cells: List<Cell>) = cells.firstOrNull { it.slot == 49 }

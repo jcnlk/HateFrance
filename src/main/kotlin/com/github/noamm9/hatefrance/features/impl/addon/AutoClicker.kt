@@ -76,7 +76,7 @@ object AutoClicker : Feature(
     private val leftTiming = ClickTiming()
     private val rightTiming = ClickTiming()
 
-    private data class ClickTiming(
+    private class ClickTiming(
         var lastDriftTime: Long = 0L,
         var baseCpsDrift: Double = 10.0
     )
@@ -153,7 +153,6 @@ object AutoClicker : Feature(
         whitelistAction("clear", WhitelistAction.CLEAR)
     }
 
-    @Suppress("unused")
     private enum class WhitelistAction { ADD, REMOVE, CLEAR }
 
     private fun CommandBuilder.whitelistAction(name: String, action: WhitelistAction) {
@@ -169,43 +168,44 @@ object AutoClicker : Feature(
         context: CommandContext<FabricClientCommandSource>,
         action: WhitelistAction
     ) {
-        val side = when (StringArgumentType.getString(context, "button").lowercase()) {
-            "left" -> WhitelistSide.LEFT
-            "right" -> WhitelistSide.RIGHT
-            else -> null
-        }
-        if (side == null) {
-            ChatUtils.modMessage("&cUse left or right as the button.")
-            return
+        val side = StringArgumentType.getString(context, "button").lowercase()
+        val setting = when (side) {
+            "left" -> favLeft
+            "right" -> favRight
+            else -> {
+                ChatUtils.modMessage("&cUse left or right as the button.")
+                return
+            }
         }
 
-        val values = whitelist(side).toMutableSet()
+        val previousValue = setting.value
+        val values = whitelistValues(setting).toMutableSet()
         val item = heldItemKey()
         val message = when (action) {
             WhitelistAction.ADD -> {
                 if (item == null) "&cYou are not holding an item."
-                else if (!values.add(item)) "&cThis item is already in the ${side.label} list."
+                else if (!values.add(item)) "&cThis item is already in the $side list."
                 else {
-                    side.setting.value = values.sorted().joinToString(", ")
-                    "&aAdded ${itemDisplayName()} &ato the ${side.label} list."
+                    setting.value = values.sorted().joinToString(", ")
+                    "&aAdded ${itemDisplayName()} &ato the $side list."
                 }
             }
 
             WhitelistAction.REMOVE -> {
                 if (item == null) "&cYou are not holding an item."
-                else if (!values.remove(item)) "&cThis item is not in the ${side.label} list."
+                else if (!values.remove(item)) "&cThis item is not in the $side list."
                 else {
-                    side.setting.value = values.sorted().joinToString(", ")
-                    "&aRemoved ${itemDisplayName()} &afrom the ${side.label} list."
+                    setting.value = values.sorted().joinToString(", ")
+                    "&aRemoved ${itemDisplayName()} &afrom the $side list."
                 }
             }
 
             WhitelistAction.CLEAR -> {
-                side.setting.value = ""
-                "&aCleared the ${side.label} list."
+                setting.value = ""
+                "&aCleared the $side list."
             }
         }
-        ConfigManager.save()
+        if (setting.value != previousValue) ConfigManager.save()
         ChatUtils.modMessage(message)
     }
 
@@ -283,16 +283,6 @@ object AutoClicker : Feature(
 
     private val currentScreen
         get() = UMinecraft.currentScreenObj
-
-    @Suppress("unused")
-    internal enum class WhitelistSide(val label: String) {
-        LEFT("left"), RIGHT("right");
-
-        val setting: TextInputSetting
-            get() = if (this == LEFT) favLeft else favRight
-    }
-
-    private fun whitelist(side: WhitelistSide): Set<String> = whitelistValues(side.setting)
 
     private fun startClicking(isLeft: Boolean, delayFirstClick: Boolean = false) {
         if (isLeft) {
