@@ -1,6 +1,7 @@
 # HateFrance
 
-[![GitHub downloads](https://img.shields.io/github/downloads/jcnlk/HateFrance/total?logo=github)](https://github.com/jcnlk/HateFrance/releases)
+![minecraft-version](https://img.shields.io/badge/Minecraft-26.2%20%7C%2026.3-6BAA57?style=for-the-badge&logoColor=white)
+[![GitHub downloads](https://img.shields.io/github/downloads/jcnlk/HateFrance/total?label=downloads&color=6BAA57&logo=github&logoColor=white&style=for-the-badge)](https://github.com/jcnlk/HateFrance/releases)
 
 Formerly known as **DancingSquared**.
 
