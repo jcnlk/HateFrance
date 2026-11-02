@@ -21,12 +21,6 @@ java {
 
 repositories {
     maven { url = uri("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") }
-    maven("https://repo.essential.gg/repository/maven-public") {
-        name = "Essential"
-        content {
-            includeGroup("gg.essential")
-        }
-    }
     ivy("https://github.com/Noamm9/NoammAddons/releases/download") {
         name = "NoammAddonsReleases"
         patternLayout {
@@ -62,7 +56,6 @@ dependencies {
             )
         }@jar"
     )
-    compileOnly("gg.essential:${project.property("universalcraft_artifact")}:${project.property("universalcraft_version")}")
     compileOnly("com.terraformersmc:modmenu:${project.property("modmenu_version")}")
 }
 

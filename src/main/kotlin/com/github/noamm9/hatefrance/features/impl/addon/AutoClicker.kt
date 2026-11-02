@@ -20,7 +20,6 @@ import com.github.noamm9.utils.items.ItemUtils.skyblockId
 import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
-import gg.essential.universal.UMinecraft
 import kotlinx.coroutines.*
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.world.phys.BlockHitResult
@@ -105,7 +104,7 @@ object AutoClicker : Feature(
                 }
                 updateMiningState()
             }
-            if (event.action != InputConstants.PRESS || currentScreen != null || !mc.isWindowActive) return@register
+            if (event.action != InputConstants.PRESS || mc.gui.screen() != null || !mc.isWindowActive) return@register
 
             for (side in 0..1) {
                 val isLeft = side == 0
@@ -127,7 +126,7 @@ object AutoClicker : Feature(
             if (!isHeld(leftClickKeybind)) leftBlocked = false
             if (!isHeld(rightClickKeybind)) rightBlocked = false
 
-            if (currentScreen != null || !mc.isWindowActive) {
+            if (mc.gui.screen() != null || !mc.isWindowActive) {
                 reset()
                 return@register
             }
@@ -229,7 +228,7 @@ object AutoClicker : Feature(
     }
 
     private fun shouldClick(isLeft: Boolean): Boolean {
-        if (currentScreen != null || !mc.isWindowActive) return false
+        if (mc.gui.screen() != null || !mc.isWindowActive) return false
         val stack = mc.player?.mainHandItem ?: return false
         val skyblockId = if (blockDungeonBreaker.value) stack.skyblockId else null
         if (skyblockId == "DUNGEONBREAKER") {
@@ -280,9 +279,6 @@ object AutoClicker : Feature(
             val state = level.getBlockState(hit.blockPos)
             return !state.isAir && state.fluidState.isEmpty
         }
-
-    private val currentScreen
-        get() = UMinecraft.currentScreenObj
 
     private fun startClicking(isLeft: Boolean, delayFirstClick: Boolean = false) {
         if (isLeft) {

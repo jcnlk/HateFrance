@@ -24,7 +24,7 @@ reviews:
     - path: "**/gradle.properties"
       instructions: |
         Review dependency updates against each target's Minecraft version, Fabric API suffix, Mod Menu major, and Fabric Kotlin runtime.
-        Keep NoammAddons release classifiers and mod version requirements in sync. UniversalCraft artifacts must match each Minecraft target.
+        Keep NoammAddons release classifiers and mod version requirements in sync.
     - path: "**/*.gradle.kts"
       instructions: |
         Account for Stonecutter preprocessing, Java 25, and the shared source tree.

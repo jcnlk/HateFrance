@@ -13,7 +13,6 @@ import com.github.noamm9.utils.items.ItemUtils.hasGlint
 import com.github.noamm9.utils.items.ItemUtils.lore
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
-import gg.essential.universal.UMinecraft
 import net.minecraft.world.item.Item
 import java.util.IdentityHashMap
 
@@ -67,7 +66,7 @@ object AutoExperiments : Feature(
             }
             val now = System.currentTimeMillis()
             if (reopenAt != 0L) {
-                if (!autoStart.value || UMinecraft.currentScreenObj != null) reset()
+                if (!autoStart.value || mc.gui.screen() != null) reset()
                 else if (now >= reopenAt) {
                     reopenAt = 0L
                     PlayerUtils.rightClick()
@@ -76,7 +75,7 @@ object AutoExperiments : Feature(
             }
 
             val screen = experimentScreen ?: return@register
-            if (UMinecraft.currentScreenObj !== screen || currentPlayer.containerMenu !== screen.menu) {
+            if (mc.gui.screen() !== screen || currentPlayer.containerMenu !== screen.menu) {
                 reset()
                 return@register
             }

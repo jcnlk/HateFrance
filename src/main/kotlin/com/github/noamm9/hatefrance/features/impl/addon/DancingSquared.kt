@@ -11,7 +11,6 @@ import com.github.noamm9.utils.MathUtils
 import com.github.noamm9.utils.PlayerUtils
 import com.github.noamm9.utils.location.LocationUtils
 import com.github.noamm9.utils.location.WorldType
-import gg.essential.universal.UMinecraft
 import kotlinx.coroutines.*
 import net.minecraft.client.KeyMapping
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket
@@ -67,7 +66,7 @@ object DancingSquared : Feature("Automatically completes the Dance Room puzzle")
             val text = packet.text.unformattedText
             if (debug) ChatUtils.chat("[DancingSquared] Subtitle received: $text (InMirrorverse: $inMirrorverse)")
 
-            if (inMirrorverse && !isActive && UMinecraft.currentScreenObj == null && mc.isWindowActive && text.contains(
+            if (inMirrorverse && !isActive && mc.gui.screen() == null && mc.isWindowActive && text.contains(
                     "Move!",
                     ignoreCase = true
                 )
