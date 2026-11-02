@@ -11,10 +11,10 @@ import com.github.noamm9.utils.GuiUtils
 import com.github.noamm9.utils.PlayerUtils
 import com.github.noamm9.utils.items.ItemUtils.hasGlint
 import com.github.noamm9.utils.items.ItemUtils.lore
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.Item
-import java.util.IdentityHashMap
+import java.util.*
 
 object AutoExperiments : Feature(
     name = "AutoExperiments",
@@ -22,11 +22,11 @@ object AutoExperiments : Feature(
 ) {
     private val clickDelay by SliderSetting("Click Delay", 200, 100, 1000, 10)
     private val delayVariety by SliderSetting("Delay Variety", 50, 0, 1000, 10)
-    private val autoStart by ToggleSetting("Auto Start", true)
+    private val autoStart by ToggleSetting("Auto Start")
         .withDescription("Selects the highest available stakes and reopens the table. Keep looking at the table.")
-    private val autoClose by ToggleSetting("Auto Close", true)
+    private val autoClose by ToggleSetting("Auto Close")
     private val serumCount by SliderSetting("Serum Count", 0, 0, 3, 1)
-    private val getMaxXp by ToggleSetting("Get Max XP", false)
+    private val getMaxXp by ToggleSetting("Get Max XP")
 
     private val solver = ExperimentSolver()
     private val cells = List(50) { Cell(it) }

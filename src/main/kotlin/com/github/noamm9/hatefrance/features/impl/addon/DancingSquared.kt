@@ -16,6 +16,7 @@ import net.minecraft.client.KeyMapping
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket
 import net.minecraft.network.protocol.game.ClientboundSoundPacket
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.milliseconds
 
 object DancingSquared : Feature("Automatically completes the Dance Room puzzle") {
     private val debug get() = NoammAddons.debugFlags.contains("dancing")
@@ -32,18 +33,13 @@ object DancingSquared : Feature("Automatically completes the Dance Room puzzle")
     private var currentKeyBind: KeyMapping? = null
     private val danceScope by lazy { CoroutineScope(SupervisorJob() + mc.asCoroutineDispatcher()) }
 
-    private const val X_MIN = -264.0
-    private const val X_MAX = -262.0
-    private const val Z_MIN = -105.0
-    private const val Z_MAX = -107.0
-
     private val segments by lazy {
         val o = mc.options
         listOf(
-            Segment("z", Z_MIN, o.keyLeft),
-            Segment("x", X_MAX, o.keyDown),
-            Segment("z", Z_MAX, o.keyRight),
-            Segment("x", X_MIN, o.keyUp),
+            Segment("z", -105.0, o.keyLeft),
+            Segment("x", -262.0, o.keyDown),
+            Segment("z", -107.0, o.keyRight),
+            Segment("x", -264.0, o.keyUp),
         )
     }
 
@@ -56,7 +52,7 @@ object DancingSquared : Feature("Automatically completes the Dance Room puzzle")
             if (!inMirrorverse) setInactive()
 
             if (inMirrorverse != wasInMirrorverse && debug) {
-                ChatUtils.chat("[DancingSquared] Mirrorverse status changed: $inMirrorverse")
+                ChatUtils.chat("[DancingSquared] Mirrorverse status changed: $inMirrorverse") // TODO: make this debug
             }
         }
 
@@ -66,11 +62,7 @@ object DancingSquared : Feature("Automatically completes the Dance Room puzzle")
             val text = packet.text.unformattedText
             if (debug) ChatUtils.chat("[DancingSquared] Subtitle received: $text (InMirrorverse: $inMirrorverse)")
 
-            if (inMirrorverse && !isActive && mc.gui.screen() == null && mc.isWindowActive && text.contains(
-                    "Move!",
-                    ignoreCase = true
-                )
-            ) {
+            if (inMirrorverse && !isActive && mc.gui.screen() == null && mc.isWindowActive && text.contains("Move!")) {
                 ChatUtils.modMessage("&bDance Room &7» &aEnabled via Subtitle!")
                 setActive()
             }
@@ -176,9 +168,9 @@ object DancingSquared : Feature("Automatically completes the Dance Room puzzle")
         if (beat >= 24 && (beat % 8 == 0 || beat % 8 == 2)) {
             status.add("jumping")
             danceScope.launch {
-                delay(JUMP_DELAY)
+                delay(JUMP_DELAY.milliseconds)
                 mc.options.keyJump.isDown = true
-                delay(100)
+                delay(100.milliseconds)
                 mc.options.keyJump.isDown = false
             }
         }
@@ -186,7 +178,7 @@ object DancingSquared : Feature("Automatically completes the Dance Room puzzle")
         if (beat >= 64 && beat % 2 == 0) {
             status.add("punching")
             danceScope.launch {
-                delay(PUNCH_DELAY)
+                delay(PUNCH_DELAY.milliseconds)
                 PlayerUtils.leftClick()
             }
         }

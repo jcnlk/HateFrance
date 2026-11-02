@@ -50,11 +50,7 @@ dependencies {
     runtimeOnly("me.djtheredstoner:DevAuth-fabric:${project.property("devauth_version")}")
 
     implementation(
-        "com.github.Noamm9:NoammAddons:${project.property("noammaddons_version")}:${sc.current.version}-${
-            project.property(
-                "noammaddons_type"
-            )
-        }@jar"
+        "com.github.Noamm9:NoammAddons:${project.property("noammaddons_version")}:${sc.current.version}-cheat@jar"
     )
     compileOnly("com.terraformersmc:modmenu:${project.property("modmenu_version")}")
 }

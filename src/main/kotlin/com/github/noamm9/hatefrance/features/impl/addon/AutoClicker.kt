@@ -31,11 +31,11 @@ object AutoClicker : Feature(
     name = "Auto Clicker",
     description = "Automatically clicks while the configured mouse or keyboard key is held."
 ), ICommandProvider {
-    private val breakBlocks by ToggleSetting("Allow Breaking Blocks", false)
+    private val breakBlocks by ToggleSetting("Allow Breaking Blocks")
         .withDescription("Keeps left click held while looking at a breakable block.")
-    private val stopOnSwap by ToggleSetting("Stop On Item Swap", false)
+    private val stopOnSwap by ToggleSetting("Stop On Item Swap")
         .withDescription("Stops both clickers when the selected hotbar slot changes.")
-    private val favouriteItems by ToggleSetting("Whitelist Only", false)
+    private val favouriteItems by ToggleSetting("Whitelist Only")
         .withDescription("Only clicks while holding an item listed below.")
     private val favLeft by TextInputSetting("Left Click Whitelist", "")
         .withDescription("Comma-separated item UUIDs, SkyBlock IDs, or display names.")
@@ -43,10 +43,10 @@ object AutoClicker : Feature(
     private val favRight by TextInputSetting("Right Click Whitelist", "")
         .withDescription("Comma-separated item UUIDs, SkyBlock IDs, or display names.").showIf { favouriteItems.value }
 
-    private val blockDungeonBreaker by ToggleSetting("Block Dungeon Breaker", true)
+    private val blockDungeonBreaker by ToggleSetting("Block Dungeon Breaker")
         .withDescription("Prevents clicking while holding Dungeon Breaker.")
 
-    private val leftClick by ToggleSetting("Enable Left Click", false)
+    private val leftClick by ToggleSetting("Enable Left Click")
     private val leftCpsMin by SliderSetting("Left CPS Min", 10, 1, 20, 1).showIf { leftClick.value }
     private val leftCpsMax by SliderSetting("Left CPS Max", 12, 1, 20, 1).showIf { leftClick.value }
     private val leftClickKeybind by KeybindSetting(
@@ -54,7 +54,7 @@ object AutoClicker : Feature(
         InputConstants.MOUSE_BUTTON_LEFT
     ).apply { isMouse = true }
 
-    private val rightClick by ToggleSetting("Enable Right Click", false)
+    private val rightClick by ToggleSetting("Enable Right Click")
     private val rightCpsMin by SliderSetting("Right CPS Min", 10, 1, 20, 1).showIf { rightClick.value }
     private val rightCpsMax by SliderSetting("Right CPS Max", 12, 1, 20, 1).showIf { rightClick.value }
     private val rightClickKeybind by KeybindSetting(
@@ -239,7 +239,8 @@ object AutoClicker : Feature(
         if (stack.isEmpty) return false
         val values = whitelistValues(if (isLeft) favLeft else favRight)
         if (values.isEmpty()) return false
-        return stack.itemUUID in values || (skyblockId ?: stack.skyblockId) in values || stack.hoverName.string in values
+        return stack.itemUUID in values || (skyblockId
+            ?: stack.skyblockId) in values || stack.hoverName.string in values
     }
 
     private fun isHeld(keybind: KeybindSetting): Boolean {
