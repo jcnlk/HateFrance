@@ -30,8 +30,8 @@ Ultrasequencer experiments, and mouse clicking.
 
 | Minecraft | HateFrance | NoammAddons |
 |-----------|----------------|-------------|
-| 26.2      | 1.3.3          | 1.3.3       |
-| 26.3      | 1.3.3          | 1.3.3       |
+| 26.2      | 1.3.4          | 1.3.4       |
+| 26.3      | 1.3.4          | 1.3.4       |
 
 ## Setup
 
