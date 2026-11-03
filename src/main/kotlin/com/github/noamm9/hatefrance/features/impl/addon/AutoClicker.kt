@@ -62,31 +62,29 @@ object AutoClicker : Feature(
         InputConstants.MOUSE_BUTTON_RIGHT
     ).apply { isMouse = true }
 
-    private var leftJob: Job? = null
-    private var rightJob: Job? = null
+    private val left = ClickState()
+    private val right = ClickState()
     private var lastHeldSlot = -1
     private var isMining = false
-    private var leftBlocked = false
-    private var rightBlocked = false
     private val heldMouseButtons = BooleanArray(9)
     private val whitelistCache = mutableMapOf<TextInputSetting, Pair<String, Set<String>>>()
     private val clickScope by lazy { CoroutineScope(SupervisorJob() + mc.asCoroutineDispatcher()) }
     private val random = Random()
-    private val leftTiming = ClickTiming()
-    private val rightTiming = ClickTiming()
 
-    private class ClickTiming(
-        var lastDriftTime: Long = 0L,
-        var baseCpsDrift: Double = 10.0
-    )
+    private class ClickState {
+        var job: Job? = null
+        var blocked = false
+        var lastDriftTime = 0L
+        var baseCpsDrift = 10.0
+    }
 
     override fun init() {
         register<KeyboardEvent.KeyPressed>(receiveCancelled = true) {
             if (event.action != InputConstants.PRESS) return@register
             updateHeldSlot()
             val key = event.keyEvent.key
-            if (!leftClickKeybind.isMouse && leftClickKeybind.value == key) leftBlocked = false
-            if (!rightClickKeybind.isMouse && rightClickKeybind.value == key) rightBlocked = false
+            if (!leftClickKeybind.isMouse && leftClickKeybind.value == key) left.blocked = false
+            if (!rightClickKeybind.isMouse && rightClickKeybind.value == key) right.blocked = false
         }
 
         register<MouseClickEvent>(receiveCancelled = true) {
@@ -95,11 +93,11 @@ object AutoClicker : Feature(
             heldMouseButtons[event.button] = event.action == InputConstants.PRESS
             if (event.action == InputConstants.RELEASE) {
                 if (leftClickKeybind.isMouse && leftClickKeybind.value == event.button) {
-                    leftBlocked = false
+                    left.blocked = false
                     stopClicking(true)
                 }
                 if (rightClickKeybind.isMouse && rightClickKeybind.value == event.button) {
-                    rightBlocked = false
+                    right.blocked = false
                     stopClicking(false)
                 }
                 updateMiningState()
@@ -123,8 +121,8 @@ object AutoClicker : Feature(
             }
 
             updateHeldSlot()
-            if (!isHeld(leftClickKeybind)) leftBlocked = false
-            if (!isHeld(rightClickKeybind)) rightBlocked = false
+            if (!isHeld(leftClickKeybind)) left.blocked = false
+            if (!isHeld(rightClickKeybind)) right.blocked = false
 
             if (mc.gui.screen() != null || !mc.isWindowActive) {
                 reset()
@@ -147,21 +145,17 @@ object AutoClicker : Feature(
     override fun CommandBuilder.command() {
         setName("autoclicker", "ac")
         description("Manage the Auto Clicker whitelist")
-        whitelistAction("add", WhitelistAction.ADD)
-        whitelistAction("remove", WhitelistAction.REMOVE)
-        whitelistAction("clear", WhitelistAction.CLEAR)
-    }
-
-    private enum class WhitelistAction { ADD, REMOVE, CLEAR }
-
-    private fun CommandBuilder.whitelistAction(name: String, action: WhitelistAction) {
-        literal(name) {
-            argument("button", StringArgumentType.word()) {
-                suggests { listOf("left", "right") }
-                runs { context -> updateWhitelist(context, action) }
+        for (action in WhitelistAction.entries) {
+            literal(action.name.lowercase()) {
+                argument("button", StringArgumentType.word()) {
+                    suggests { listOf("left", "right") }
+                    runs { context -> updateWhitelist(context, action) }
+                }
             }
         }
     }
+
+    private enum class WhitelistAction { ADD, REMOVE, CLEAR }
 
     private fun updateWhitelist(
         context: CommandContext<FabricClientCommandSource>,
@@ -180,28 +174,18 @@ object AutoClicker : Feature(
         val previousValue = setting.value
         val values = whitelistValues(setting).toMutableSet()
         val item = heldItemKey()
-        val message = when (action) {
-            WhitelistAction.ADD -> {
-                if (item == null) "&cYou are not holding an item."
-                else if (!values.add(item)) "&cThis item is already in the $side list."
-                else {
-                    setting.value = values.sorted().joinToString(", ")
-                    "&aAdded ${itemDisplayName()} &ato the $side list."
-                }
-            }
-
-            WhitelistAction.REMOVE -> {
-                if (item == null) "&cYou are not holding an item."
-                else if (!values.remove(item)) "&cThis item is not in the $side list."
-                else {
-                    setting.value = values.sorted().joinToString(", ")
-                    "&aRemoved ${itemDisplayName()} &afrom the $side list."
-                }
-            }
-
-            WhitelistAction.CLEAR -> {
+        val message = when {
+            action == WhitelistAction.CLEAR -> {
                 setting.value = ""
                 "&aCleared the $side list."
+            }
+            item == null -> "&cYou are not holding an item."
+            action == WhitelistAction.ADD && !values.add(item) -> "&cThis item is already in the $side list."
+            action == WhitelistAction.REMOVE && !values.remove(item) -> "&cThis item is not in the $side list."
+            else -> {
+                setting.value = values.sorted().joinToString(", ")
+                if (action == WhitelistAction.ADD) "&aAdded ${itemDisplayName()} &ato the $side list."
+                else "&aRemoved ${itemDisplayName()} &afrom the $side list."
             }
         }
         if (setting.value != previousValue) ConfigManager.save()
@@ -258,8 +242,8 @@ object AutoClicker : Feature(
         if (stopOnSwap.value && lastHeldSlot != -1 && currentSlot != lastHeldSlot) {
             stopClicking(true)
             stopClicking(false)
-            leftBlocked = isHeld(leftClickKeybind)
-            rightBlocked = isHeld(rightClickKeybind)
+            left.blocked = isHeld(leftClickKeybind)
+            right.blocked = isHeld(rightClickKeybind)
         }
         lastHeldSlot = currentSlot
     }
@@ -267,7 +251,7 @@ object AutoClicker : Feature(
     private fun shouldAutoClick(isLeft: Boolean): Boolean {
         val enabledForButton = if (isLeft) leftClick else rightClick
         val keybind = if (isLeft) leftClickKeybind else rightClickKeybind
-        if (if (isLeft) leftBlocked else rightBlocked) return false
+        if ((if (isLeft) left else right).blocked) return false
         if (stopOnSwap.value && lastHeldSlot != -1 && mc.player?.inventory?.selectedSlot != lastHeldSlot) return false
         return enabled && enabledForButton.value && isHeld(keybind) && shouldClick(isLeft)
     }
@@ -282,27 +266,19 @@ object AutoClicker : Feature(
         }
 
     private fun startClicking(isLeft: Boolean, delayFirstClick: Boolean = false) {
-        if (isLeft) {
-            if (leftJob?.isActive == true) return
-            leftJob = clickScope.launch { click(true, delayFirstClick) }
-        } else {
-            if (rightJob?.isActive == true) return
-            rightJob = clickScope.launch { click(false, delayFirstClick) }
-        }
+        val state = if (isLeft) left else right
+        if (state.job?.isActive == true) return
+        state.job = clickScope.launch { click(isLeft, delayFirstClick) }
     }
 
     private fun stopClicking(isLeft: Boolean) {
-        if (isLeft) {
-            leftJob?.cancel()
-            leftJob = null
-        } else {
-            rightJob?.cancel()
-            rightJob = null
-        }
+        val state = if (isLeft) left else right
+        state.job?.cancel()
+        state.job = null
     }
 
     private fun updateMiningState() {
-        val shouldMine = leftJob?.isActive == true && lookingAtBreakable
+        val shouldMine = left.job?.isActive == true && lookingAtBreakable
         if (shouldMine == isMining) return
 
         mc.options.keyAttack.isDown = shouldMine
@@ -310,7 +286,7 @@ object AutoClicker : Feature(
     }
 
     private fun getNextClick(now: Long, isLeft: Boolean): Long {
-        val timing = if (isLeft) leftTiming else rightTiming
+        val timing = if (isLeft) left else right
         if (now - timing.lastDriftTime > 1000) {
             val minCps = if (isLeft) leftCpsMin else rightCpsMin
             val maxCps = if (isLeft) leftCpsMax else rightCpsMax
