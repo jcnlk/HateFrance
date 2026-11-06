@@ -3,35 +3,24 @@
 ![minecraft-version](https://img.shields.io/badge/Minecraft-26.2%20%7C%2026.3-6BAA57?style=for-the-badge&logoColor=white)
 [![GitHub downloads](https://img.shields.io/github/downloads/jcnlk/HateFrance/total?label=downloads&color=6BAA57&logo=github&logoColor=white&style=for-the-badge)](https://github.com/jcnlk/HateFrance/releases)
 
+A client-side Fabric addon for NoammAddons that automates Hypixel SkyBlock tasks.
 Formerly known as **DancingSquared**.
 
-> A client-side Fabric addon for NoammAddons that automates selected Hypixel SkyBlock tasks.
+## Features
 
-HateFrance includes automation for the Rift Dance Room, the Chronomatron and
-Ultrasequencer experiments, and mouse clicking.
-
-> [!IMPORTANT]
-> Before using HateFrance, disable **Play music** in the SkyBlock settings.
-> Disable Sodium's FPS limiter and set Sodium's **Reduce FPS when** option to **Minimized**.
-
-<details>
-<summary>Features</summary>
-
-- **Dance Room**: Completes the Dance Room sequence in the Rift Mirrorverse.
+- **DancingSquared**: Completes the Dance Room sequence in the Rift Mirrorverse.
 - **AutoExperiments**: Selects, starts, and solves Chronomatron and Ultrasequencer,
   then reopens the table for the next available experiment. Enable **Auto Start**,
   open the Experimentation Table, and keep looking at it. The highest playable
   stakes are selected automatically.
 - **Auto Clicker**: Adds configurable left and right click automation.
 
-</details>
-
 ## Compatibility
 
 | Minecraft | HateFrance | NoammAddons |
-|-----------|----------------|-------------|
-| 26.2      | 1.3.4          | 1.3.4       |
-| 26.3      | 1.3.4          | 1.3.4       |
+|-----------|------------|-------------|
+| 26.2      | 1.3.4      | 1.3.4       |
+| 26.3      | 1.3.4      | 1.3.4       |
 
 ## Setup
 
@@ -44,9 +33,11 @@ Ultrasequencer experiments, and mouse clicking.
 4. Open the NoammAddons configuration screen. [Mod Menu](https://modrinth.com/mod/modmenu)
    adds a direct entry for it.
 
-## Configuration
+> [!IMPORTANT]
+> Before using the DancingSquared feature, disable **Play music** in the SkyBlock settings.
+> Disable Sodium's FPS limiter and set Sodium's **Reduce FPS when** option to **Minimized**.
 
-[Watch the HateFrance demonstration on YouTube](https://www.youtube.com/watch?v=5fQQJVvan1g)
+[Watch the DancingSquared demonstration on YouTube](https://www.youtube.com/watch?v=5fQQJVvan1g)
 
 ## Support
 
@@ -54,5 +45,5 @@ For help, contact `jcnlk` on Discord or open an [issue](https://github.com/jcnlk
 
 ## Credits
 
-The original mod and Dance Room implementation were created by [Noamm](https://github.com/Noamm9).
+The original DancingSquared implementation was created by [Noamm](https://github.com/Noamm9).
 HateFrance is released under [CC0 1.0](LICENSE).
