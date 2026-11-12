@@ -17,7 +17,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.9.8"
+    id("dev.kikugie.stonecutter") version "0.10"
 }
 
 rootProject.name = "HateFrance"
