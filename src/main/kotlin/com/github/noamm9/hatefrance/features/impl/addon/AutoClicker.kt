@@ -3,7 +3,7 @@ package com.github.noamm9.hatefrance.features.impl.addon
 import com.github.noamm9.commands.CommandBuilder
 import com.github.noamm9.config.ConfigManager
 import com.github.noamm9.config.types.KeybindSetting
-import com.github.noamm9.config.types.SliderSetting
+import com.github.noamm9.config.types.RangeSliderSetting
 import com.github.noamm9.config.types.TextInputSetting
 import com.github.noamm9.config.types.ToggleSetting
 import com.github.noamm9.event.impl.KeyboardEvent
@@ -47,16 +47,14 @@ object AutoClicker : Feature(
         .withDescription("Prevents clicking while holding Dungeon Breaker.")
 
     private val leftClick by ToggleSetting("Enable Left Click")
-    private val leftCpsMin by SliderSetting("Left CPS Min", 10, 1, 20, 1).showIf { leftClick.value }
-    private val leftCpsMax by SliderSetting("Left CPS Max", 12, 1, 20, 1).showIf { leftClick.value }
+    private val leftCps by RangeSliderSetting("Left CPS", 10 to 12, 1, 20, 1).showIf { leftClick.value }
     private val leftClickKeybind by KeybindSetting(
         "Left Click Keybind",
         InputConstants.MOUSE_BUTTON_LEFT
     ).apply { isMouse = true }
 
     private val rightClick by ToggleSetting("Enable Right Click")
-    private val rightCpsMin by SliderSetting("Right CPS Min", 10, 1, 20, 1).showIf { rightClick.value }
-    private val rightCpsMax by SliderSetting("Right CPS Max", 12, 1, 20, 1).showIf { rightClick.value }
+    private val rightCps by RangeSliderSetting("Right CPS", 10 to 12, 1, 20, 1).showIf { rightClick.value }
     private val rightClickKeybind by KeybindSetting(
         "Right Click Keybind",
         InputConstants.MOUSE_BUTTON_RIGHT
@@ -288,9 +286,8 @@ object AutoClicker : Feature(
     private fun getNextClick(now: Long, isLeft: Boolean): Long {
         val timing = if (isLeft) left else right
         if (now - timing.lastDriftTime > 1000) {
-            val minCps = if (isLeft) leftCpsMin else rightCpsMin
-            val maxCps = if (isLeft) leftCpsMax else rightCpsMax
-            val targetCps = ((minCps.value + maxCps.value) / 2.0).coerceAtLeast(1.0)
+            val cps = if (isLeft) leftCps else rightCps
+            val targetCps = ((cps.start + cps.end) / 2.0).coerceAtLeast(1.0)
             timing.baseCpsDrift = (targetCps + MathUtils.gaussianRandom(-10, 10) / 10.0).coerceAtLeast(1.0)
             timing.lastDriftTime = now
         }

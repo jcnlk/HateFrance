@@ -1,5 +1,6 @@
 package com.github.noamm9.hatefrance.features.impl.addon
 
+import com.github.noamm9.config.types.RangeSliderSetting
 import com.github.noamm9.config.types.SliderSetting
 import com.github.noamm9.config.types.ToggleSetting
 import com.github.noamm9.event.impl.ContainerEvent
@@ -20,8 +21,9 @@ object AutoExperiments : Feature(
     name = "AutoExperiments",
     description = "Selects, starts and solves Chronomatron and Ultrasequencer experiments."
 ) {
-    private val clickDelay by SliderSetting("Click Delay", 200, 100, 1000, 10)
-    private val delayVariety by SliderSetting("Delay Variety", 50, 0, 1000, 10)
+    private val clickDelay by RangeSliderSetting("Click Delay", 200 to 250, 100, 2000, 10, "ms")
+        .jsonName("Click Delay Range")
+        .withDescription("A random delay is picked between the start and end of this range.")
     private val autoStart by ToggleSetting("Auto Start")
         .withDescription("Selects the highest available stakes and reopens the table. Keep looking at the table.")
     private val autoClose by ToggleSetting("Auto Close")
@@ -169,8 +171,7 @@ object AutoExperiments : Feature(
     private fun isStakeSelection(title: String, game: String) = title.startsWith(game) && title.endsWith("Stakes")
 
     private fun delay(): Long {
-        val variety = if (delayVariety.value == 0) 0 else (0..delayVariety.value).random()
-        return clickDelay.value.toLong() + variety
+        return (clickDelay.start..clickDelay.end).random().toLong()
     }
 
     private fun chronomatronTarget() = if (getMaxXp.value) 15 else 11 - serumCount.value
