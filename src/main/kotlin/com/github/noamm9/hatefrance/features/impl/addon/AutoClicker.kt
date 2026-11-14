@@ -81,14 +81,16 @@ object AutoClicker : Feature(
             if (event.action != InputConstants.PRESS) return@register
             updateHeldSlot()
             val key = event.keyEvent.key
-            if (!leftClickKeybind.isMouse && leftClickKeybind.value == key) left.blocked = false
-            if (!rightClickKeybind.isMouse && rightClickKeybind.value == key) right.blocked = false
+            val blockInput = mc.gui.screen() != null || !mc.isWindowActive
+            if (!leftClickKeybind.isMouse && leftClickKeybind.value == key) left.blocked = blockInput
+            if (!rightClickKeybind.isMouse && rightClickKeybind.value == key) right.blocked = blockInput
         }
 
         register<MouseClickEvent>(receiveCancelled = true) {
             if (event.button !in heldMouseButtons.indices) return@register
             updateHeldSlot()
-            heldMouseButtons[event.button] = event.action == InputConstants.PRESS
+            heldMouseButtons[event.button] =
+                event.action == InputConstants.PRESS && mc.gui.screen() == null && mc.isWindowActive
             if (event.action == InputConstants.RELEASE) {
                 if (leftClickKeybind.isMouse && leftClickKeybind.value == event.button) {
                     left.blocked = false
