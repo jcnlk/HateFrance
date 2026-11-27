@@ -25,13 +25,9 @@ Formerly known as **DancingSquared**.
 ## Setup
 
 1. Install [Fabric Loader](https://fabricmc.net/use/installer/) for Minecraft 26.2 or 26.3.
-2. Add [Fabric API](https://modrinth.com/mod/fabric-api),
-   [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin),
-   and the matching [NoammAddons](https://github.com/Noamm9/NoammAddons)
-   version to your `mods` folder.
+2. Add [Fabric API](https://modrinth.com/mod/fabric-api), [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin), and the matching [NoammAddons](https://github.com/Noamm9/NoammAddons) version to your `mods` folder.
 3. Add the matching HateFrance jar.
-4. Open the NoammAddons configuration screen. [Mod Menu](https://modrinth.com/mod/modmenu)
-   adds a direct entry for it.
+4. Open the NoammAddons configuration screen. [Mod Menu](https://modrinth.com/mod/modmenu) adds a direct entry for it.
 
 > [!IMPORTANT]
 > Before using the DancingSquared feature, disable **Play music** in the SkyBlock settings.
