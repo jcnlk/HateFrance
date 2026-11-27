@@ -19,8 +19,8 @@ Formerly known as **DancingSquared**.
 
 | Minecraft | HateFrance | NoammAddons |
 |-----------|------------|-------------|
-| 26.2      | 1.3.5      | 1.3.6       |
-| 26.3      | 1.3.5      | 1.3.6       |
+| 26.2      | 1.3.6      | 1.3.6       |
+| 26.3      | 1.3.6      | 1.3.6       |
 
 ## Setup
 
