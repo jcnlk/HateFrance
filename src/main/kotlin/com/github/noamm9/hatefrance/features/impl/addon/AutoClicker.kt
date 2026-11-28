@@ -27,7 +27,7 @@ import net.minecraft.world.phys.BlockHitResult
 import java.util.*
 import kotlin.time.Duration.Companion.milliseconds
 
-// https://github.com/jcnlk/quoi/blob/multiversion/src/main/kotlin/quoi/module/impl/general/AutoClicker.kt
+// based on https://github.com/jcnlk/quoi/blob/multiversion/src/main/kotlin/quoi/module/impl/general/AutoClicker.kt
 object AutoClicker : Feature(
     name = "Auto Clicker",
     description = "Automatically clicks while the configured mouse or keyboard key is held."
@@ -52,14 +52,14 @@ object AutoClicker : Feature(
     private val leftClickKeybind by KeybindSetting(
         "Left Click Keybind",
         InputConstants.MOUSE_BUTTON_LEFT
-    ).apply { isMouse = true }
+    ).apply { isMouse = true }.showIf { leftClick.value }
 
     private val rightClick by ToggleSetting("Enable Right Click")
     private val rightCps by RangeSliderSetting("Right CPS", 10 to 12, 1, 20, 1).showIf { rightClick.value }
     private val rightClickKeybind by KeybindSetting(
         "Right Click Keybind",
         InputConstants.MOUSE_BUTTON_RIGHT
-    ).apply { isMouse = true }
+    ).apply { isMouse = true }.showIf { rightClick.value }
 
     private val left = ClickState()
     private val right = ClickState()
@@ -187,6 +187,7 @@ object AutoClicker : Feature(
                 setting.value = ""
                 "&aCleared the $side list."
             }
+
             item == null -> "&cYou are not holding an item."
             action == WhitelistAction.ADD && !values.add(item) -> "&cThis item is already in the $side list."
             action == WhitelistAction.REMOVE && !values.remove(item) -> "&cThis item is not in the $side list."
