@@ -1,12 +1,16 @@
-package com.github.noamm9.hatefrance.features.impl.addon
+package com.github.noamm9.hatefrance.features.impl.addon.experiments
 
-internal class Cell(
-    val slot: Int,
-    var itemId: String = "",
-    var count: Int = 0,
-    var foil: Boolean = false
-)
+// registry ids instead of Items fields, those differ between game versions
+internal class Cell(val slot: Int) {
+    var itemId = ""
+    var count = 0
+    var foil = false
+}
 
+/**
+ * Chronomatron and ultrasequencer solver
+ * Slot 49 shows glowstone while the pattern is shown and a clock while it has to be repeated
+ */
 internal class ExperimentSolver {
     private enum class Mode { NONE, CHRONOMATRON, ULTRASEQUENCER }
 
@@ -43,25 +47,30 @@ internal class ExperimentSolver {
         }
     }
 
-    fun shouldClose(cells: List<Cell>, chronoTarget: Int, ultraTarget: Int): Boolean {
+    /**
+     * True once the "Chain of N" or "Series of N" from the stakes tooltip is completed, or the xp cap without one
+     * Checked once the next round is shown, so the server already counted the last one
+     */
+    fun shouldClose(cells: List<Cell>, rewardLength: Int?): Boolean {
         return when (mode) {
-            Mode.CHRONOMATRON -> chronoRoundComplete && chronomatron.size > chronoTarget
-            Mode.ULTRASEQUENCER -> cell(cells)?.itemId == "minecraft:clock" &&
-                    ultraIndex >= ultraSize && ultraSize >= ultraTarget
+            Mode.CHRONOMATRON -> chronoRoundComplete && chronomatron.size >= (rewardLength ?: MAX_CHAIN)
+            // hypixel bug: the "Series of N" clicks are already given after N - 1 (see skyhanni)
+            Mode.ULTRASEQUENCER -> control(cells) == GLOWSTONE &&
+                    ultraSize > (rewardLength?.minus(1) ?: MAX_SERIES)
 
             Mode.NONE -> false
         }
     }
 
     private fun nextChronomatron(cells: List<Cell>, canClick: Boolean): Int? {
-        val control = cell(cells)?.itemId ?: return null
-        if (control == "minecraft:glowstone") {
+        val control = control(cells) ?: return null
+        if (control == GLOWSTONE) {
             if (chronoRevealSeen && chronoIndex >= chronomatron.size) chronoRoundComplete = true
             chronoRevealSeen = false
             chronoIndex = 0
             return null
         }
-        if (control != "minecraft:clock") return null
+        if (control != CLOCK) return null
 
         cells.firstOrNull { it.slot in 10..43 && it.foil }?.let { reveal ->
             if (!chronoRevealSeen) {
@@ -75,11 +84,11 @@ internal class ExperimentSolver {
     }
 
     private fun nextUltrasequencer(cells: List<Cell>, canClick: Boolean): Int? {
-        val control = cell(cells)?.itemId ?: return null
-        if (control == "minecraft:glowstone") {
+        val control = control(cells) ?: return null
+        if (control == GLOWSTONE) {
             clearUltrasequencer()
             for (cell in cells) {
-                if (cell.slot !in 9..44 || !isSequenceItem(cell)) continue
+                if (cell.slot !in 9..44 || !isSequenceItem(cell.itemId)) continue
                 if (cell.count !in 1..36 || ultrasequencer[cell.count - 1] != -1) {
                     clearUltrasequencer()
                     break
@@ -90,7 +99,7 @@ internal class ExperimentSolver {
             if ((0 until ultraSize).any { ultrasequencer[it] == -1 }) clearUltrasequencer()
             return null
         }
-        if (control != "minecraft:clock" || !canClick || ultraIndex >= ultraSize) return null
+        if (control != CLOCK || !canClick || ultraIndex >= ultraSize) return null
         return ultrasequencer[ultraIndex].also { ultraIndex++ }
     }
 
@@ -108,10 +117,17 @@ internal class ExperimentSolver {
         clearUltrasequencer()
     }
 
-    private fun cell(cells: List<Cell>) = cells.firstOrNull { it.slot == 49 }
+    private fun control(cells: List<Cell>) = cells.firstOrNull { it.slot == 49 }?.itemId
 
-    private fun isSequenceItem(cell: Cell): Boolean {
-        val item = cell.itemId.substringAfter(':')
-        return item.endsWith("_dye") || item == "lapis_lazuli" || item == "bone_meal"
+    private fun isSequenceItem(id: String) =
+        id.endsWith("_dye") || id == "minecraft:lapis_lazuli" || id == "minecraft:bone_meal"
+
+    private companion object {
+        const val GLOWSTONE = "minecraft:glowstone"
+        const val CLOCK = "minecraft:clock"
+
+        // no more xp after these
+        const val MAX_CHAIN = 15
+        const val MAX_SERIES = 20
     }
 }

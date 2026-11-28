@@ -20,8 +20,7 @@ Formerly known as **DancingSquared**.
 - **Auto Clicker**
   - Repeats left or right clicks while the configured key or mouse button is held.
 - **AutoExperiments**
-  - Solves Chronomatron and Ultrasequencer experiments.
-  - Enable **Auto Start**, open the Experimentation Table, and keep looking at it. AutoExperiments selects the highest playable stakes and reopens the table for the next available experiment.
+  - Automatically plays the Experimentation Table and claims its rewards.
 - **DancingSquared**
   - Completes the Dance Room sequence in the Rift Mirrorverse.
 
