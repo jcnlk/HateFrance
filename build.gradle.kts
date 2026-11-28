@@ -1,3 +1,4 @@
+import groovy.json.JsonOutput
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -57,6 +58,8 @@ dependencies {
 
 tasks.processResources {
     val resourceProperties = mapOf(
+        "mod_id" to project.property("mod_id"),
+        "mod_name" to JsonOutput.toJson(project.property("mod_name")).removeSurrounding("\""),
         "version" to project.version,
         "minecraft_version" to sc.current.version,
         "loader_version" to project.property("loader_version"),

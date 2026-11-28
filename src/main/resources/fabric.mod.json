@@ -1,8 +1,8 @@
 {
     "schemaVersion": 1,
-    "id": "hatefrance",
+    "id": "${mod_id}",
     "version": "${version}",
-    "name": "HateFrance",
+    "name": "${mod_name}",
     "description": "Client-side NoammAddons extension for Hypixel SkyBlock with Dance Room automation, experiment solvers, and configurable auto-clicking.",
     "authors": [
         "Noamm",
@@ -27,7 +27,10 @@
         "fabricloader": ">=${loader_version}",
         "fabric-language-kotlin": ">=${kotlin_loader_version}",
         "fabric-api": "*",
-        "noammaddons": "${noammaddons_version}",
+        "noammaddons": [
+            "${noammaddons_version}",
+            "999.0.0"
+        ],
         "minecraft": "${minecraft_version}"
     },
     "suggests": {
@@ -35,5 +38,8 @@
     },
     "breaks": {
         "dancingsquared": "*"
+    },
+    "custom": {
+        "noammaddons-version": "${noammaddons_version}"
     }
 }

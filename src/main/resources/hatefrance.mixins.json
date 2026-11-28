@@ -2,6 +2,7 @@
     "required": true,
     "minVersion": "0.8",
     "package": "com.github.noamm9.hatefrance.mixins",
+    "plugin": "com.github.noamm9.hatefrance.compat.NoammAddonsVersionCheck",
     "compatibilityLevel": "JAVA_25",
     "client": [
         "MixinCategoryType"

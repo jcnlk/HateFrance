@@ -33,10 +33,13 @@ Formerly known as **DancingSquared**.
 | 26.2      | 1.3.6      | 1.3.6       |
 | 26.3      | 1.3.6      | 1.3.6       |
 
+NoammAddons Loader downloads the latest Cheat build for your Minecraft version. If it installs a newer NoammAddons version, update HateFrance to match.
+
 ## Setup
 
 1. Install [Fabric Loader](https://fabricmc.net/use/installer/) for Minecraft 26.2 or 26.3.
 2. Add [Fabric API](https://modrinth.com/mod/fabric-api), [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin), and the matching [NoammAddons](https://github.com/Noamm9/NoammAddons) version to your `mods` folder.
+    For automatic updates, replace the NoammAddons jar with [NoammAddons Loader 1.0.2](https://github.com/Noamm9/NoammAddons-Loader/releases/tag/1.0.2).
 3. Add the matching HateFrance jar.
 4. Open the configuration screen with `/hf` or `/na`. [Mod Menu](https://modrinth.com/mod/modmenu) adds a direct entry for it.
 
