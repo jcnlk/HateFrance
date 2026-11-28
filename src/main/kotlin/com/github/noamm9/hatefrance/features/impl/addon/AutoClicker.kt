@@ -11,6 +11,7 @@ import com.github.noamm9.event.impl.MouseClickEvent
 import com.github.noamm9.event.impl.TickEvent
 import com.github.noamm9.event.impl.WorldChangeEvent
 import com.github.noamm9.features.Feature
+import com.github.noamm9.hatefrance.commands.HateFranceCommand
 import com.github.noamm9.init.types.ICommandProvider
 import com.github.noamm9.utils.ChatUtils
 import com.github.noamm9.utils.MathUtils
@@ -143,13 +144,20 @@ object AutoClicker : Feature(
     }
 
     override fun CommandBuilder.command() {
-        setName("autoclicker", "ac")
-        description("Manage the Auto Clicker whitelist")
-        for (action in WhitelistAction.entries) {
-            literal(action.name.lowercase()) {
-                argument("button", StringArgumentType.word()) {
-                    suggests { listOf("left", "right") }
-                    runs { context -> updateWhitelist(context, action) }
+        setName(*HateFranceCommand.names)
+        whitelistCommand("autoclicker")
+        whitelistCommand("ac")
+    }
+
+    private fun CommandBuilder.whitelistCommand(name: String) {
+        literal(name) {
+            description("Manage the Auto Clicker whitelist")
+            for (action in WhitelistAction.entries) {
+                literal(action.name.lowercase()) {
+                    argument("button", StringArgumentType.word()) {
+                        suggests { listOf("left", "right") }
+                        runs { context -> updateWhitelist(context, action) }
+                    }
                 }
             }
         }

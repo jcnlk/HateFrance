@@ -6,14 +6,26 @@
 A client-side Fabric addon for NoammAddons that automates Hypixel SkyBlock tasks.
 Formerly known as **DancingSquared**.
 
+## Commands
+
+- `/hatefrance` or `/hf` - Opens the configuration menu.
+- `/na`, `/noamm`, or `/noammaddons` - Opens the same menu through NoammAddons.
+- `/hatefrance autoclicker <add|remove|clear> <left|right>` - Adds or removes the held item or clears the selected whitelist. `/hf ac` is the shorthand.
+
 ## Features
 
-- **DancingSquared**: Completes the Dance Room sequence in the Rift Mirrorverse.
-- **AutoExperiments**: Selects, starts, and solves Chronomatron and Ultrasequencer,
-  then reopens the table for the next available experiment. Enable **Auto Start**,
-  open the Experimentation Table, and keep looking at it. The highest playable
-  stakes are selected automatically.
-- **Auto Clicker**: Adds configurable left and right click automation.
+<details>
+<summary><b>Addon</b></summary>
+
+- **Auto Clicker**
+  - Repeats left or right clicks while the configured key or mouse button is held.
+- **AutoExperiments**
+  - Solves Chronomatron and Ultrasequencer experiments.
+  - Enable **Auto Start**, open the Experimentation Table, and keep looking at it. AutoExperiments selects the highest playable stakes and reopens the table for the next available experiment.
+- **DancingSquared**
+  - Completes the Dance Room sequence in the Rift Mirrorverse.
+
+</details>
 
 ## Compatibility
 
@@ -27,7 +39,7 @@ Formerly known as **DancingSquared**.
 1. Install [Fabric Loader](https://fabricmc.net/use/installer/) for Minecraft 26.2 or 26.3.
 2. Add [Fabric API](https://modrinth.com/mod/fabric-api), [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin), and the matching [NoammAddons](https://github.com/Noamm9/NoammAddons) version to your `mods` folder.
 3. Add the matching HateFrance jar.
-4. Open the NoammAddons configuration screen. [Mod Menu](https://modrinth.com/mod/modmenu) adds a direct entry for it.
+4. Open the configuration screen with `/hf` or `/na`. [Mod Menu](https://modrinth.com/mod/modmenu) adds a direct entry for it.
 
 > [!IMPORTANT]
 > Before using the DancingSquared feature, disable **Play music** in the SkyBlock settings.
